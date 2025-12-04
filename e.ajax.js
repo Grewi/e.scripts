@@ -241,3 +241,32 @@ function ajaxClick(e) {
             console.log(d);
         }, e, method);
 }
+
+function eAjax(url, method = 'GET', data = {}, funSuccess = null, funError = null) {
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (response.ok) {
+                response.text().then(d => {
+                    if(funSuccess){
+                        funSuccess(d);
+                    }
+                });
+            } else {
+                response.text().then(d => {
+                    if(funError){
+                        funError();
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        })
+}
